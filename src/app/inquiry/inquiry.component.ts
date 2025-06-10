@@ -90,6 +90,19 @@ export class InquiryComponent {
       });
   }
 
+  getThisMonthCount(): number {
+    const currentMonth = new Date().getMonth();
+    const currentYear = new Date().getFullYear();
+    return this.INQUIRY.filter(item => {
+      const itemDate = new Date(item.ERDAT);
+      return itemDate.getMonth() === currentMonth && itemDate.getFullYear() === currentYear;
+    }).length;
+  }
+
+  getPercentage(value: number, total: number): number {
+    return total > 0 ? Math.round((value / total) * 100) : 0;
+  }
+
   onSearchChange(): void {
     this.currentPage = 1;
     this.filterData();
@@ -111,7 +124,7 @@ export class InquiryComponent {
       
       const matchesFilter = this.activeFilter === 'all' || 
         (this.activeFilter === 'completed' && row.GBSTK === 'C') ||
-        (this.activeFilter === 'inProgress' && ['A', 'B'].includes(row.GBSTK));
+        (this.activeFilter === 'pending' && ['A', 'B'].includes(row.GBSTK));
       
       return matchesSearch && matchesFilter;
     });

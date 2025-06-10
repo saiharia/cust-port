@@ -1,6 +1,7 @@
 <!-- inquiry.component.html -->
 <div class="inquiry-container">
-    <div class="header">
+  <!-- Header -->
+  <div class="header">
     <div class="header-left">
       <h2>Inquiry Data</h2>
     </div>
@@ -10,7 +11,7 @@
         type="text" 
         [(ngModel)]="searchText" 
         (ngModelChange)="onSearchChange()" 
-        placeholder="Search sales orders..."
+        placeholder="Search inquiries..."
       />
       <button class="search-btn" (click)="search()">
         <i class="bi bi-search"></i>
@@ -18,6 +19,54 @@
     </div>
   </div>
 
+  <!-- Summary Cards -->
+  <div class="summary-cards">
+    <div class="summary-card">
+      <div class="card-icon">
+        <i class="bi bi-search"></i>
+      </div>
+      <div class="card-content">
+        <h3>Total Inquiries</h3>
+        <p class="card-value">{{ totalDocuments }}</p>
+        <span class="card-label">All time</span>
+      </div>
+    </div>
+
+    <div class="summary-card">
+      <div class="card-icon">
+        <i class="bi bi-check-circle"></i>
+      </div>
+      <div class="card-content">
+        <h3>Completed</h3>
+        <p class="card-value">{{ completedCount }}</p>
+        <span class="card-label">{{ getPercentage(completedCount, totalDocuments) }}% of total</span>
+      </div>
+    </div>
+
+    <div class="summary-card">
+      <div class="card-icon">
+        <i class="bi bi-clock"></i>
+      </div>
+      <div class="card-content">
+        <h3>Pending</h3>
+        <p class="card-value">{{ pendingCount }}</p>
+        <span class="card-label">{{ getPercentage(pendingCount, totalDocuments) }}% of total</span>
+      </div>
+    </div>
+
+    <div class="summary-card">
+      <div class="card-icon">
+        <i class="bi bi-calendar"></i>
+      </div>
+      <div class="card-content">
+        <h3>This Month</h3>
+        <p class="card-value">{{ getThisMonthCount() }}</p>
+        <span class="card-label">Recent inquiries</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filters Row -->
   <div class="filters-row">
     <div class="filter-group">
       <button class="filter-btn" [class.active]="activeFilter === 'all'" (click)="setActiveFilter('all')">
@@ -38,6 +87,7 @@
     </div>
   </div>
 
+  <!-- Table -->
   <div class="table-wrapper">
     <table>
       <thead>
@@ -59,25 +109,25 @@
       </thead>
       <tbody>
         <ng-container *ngIf="paginatedData && paginatedData.length > 0; else noData">
-          <tr *ngFor="let row of paginatedData; let idx = index">
-  <td *ngFor="let col of names">
-    <ng-container *ngIf="col === 'GBSTK'; else normalCell">
-      <span class="status" [ngClass]="getStatusClass(row[col])">
-        {{ getStatusText(row[col]) }}
-      </span>
-    </ng-container>
-    <ng-template #normalCell>
-      <ng-container *ngIf="col !== 'action'; else actionCell">
-        {{ formatCellValue(row[col], col) }}
-      </ng-container>
-      <ng-template #actionCell>
-        <button class="view-btn" (click)="viewDetails(row)">
-          <i class="bi bi-eye"></i> View
-        </button>
-      </ng-template>
-    </ng-template>
-  </td>
-</tr>
+          <tr *ngFor="let row of paginatedData; let idx = index" (click)="viewDetails(row)" class="clickable-row">
+            <td *ngFor="let col of names">
+              <ng-container *ngIf="col === 'GBSTK'; else normalCell">
+                <span class="status" [ngClass]="getStatusClass(row[col])">
+                  {{ getStatusText(row[col]) }}
+                </span>
+              </ng-container>
+              <ng-template #normalCell>
+                <ng-container *ngIf="col !== 'action'; else actionCell">
+                  {{ formatCellValue(row[col], col) }}
+                </ng-container>
+                <ng-template #actionCell>
+                  <button class="view-btn" (click)="viewDetails(row); $event.stopPropagation()">
+                    <i class="bi bi-eye"></i> View
+                  </button>
+                </ng-template>
+              </ng-template>
+            </td>
+          </tr>
         </ng-container>
         <ng-template #noData>
           <tr>
@@ -91,6 +141,7 @@
     </table>
   </div>
 
+  <!-- Pagination -->
   <div class="pagination" *ngIf="totalPages > 1">
     <div class="page-info">
       Showing {{ getFirstItemIndex() }} to {{ getLastItemIndex() }} of {{ filteredData.length }} entries

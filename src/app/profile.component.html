@@ -1,106 +1,94 @@
-<body>
-  <div class="container">
-    <h1 class="page-title">Profile</h1>
-    
-    <div class="profile-container">
-      <!-- Left Column - Profile Card -->
-      <div class="profile-card">
-        <div class="profile-banner"></div>
-        <div class="profile-avatar">
-          <i class="bi bi-person"></i>
-        </div>
-        <div class="profile-info">
-          <div>
-            <h2 class="profile-name">{{ name1 }}</h2>
-            <div class="profile-id">
-              <i class="bi bi-person-badge"></i>
-              <span>Customer ID: {{ customerId }}</span>
-            </div>
-            <div class="profile-location">
-              <i class="bi bi-geo-alt-fill"></i>
-              <span>{{ city }}</span>
-            </div>
-            <div class="user-status">
-              <i class="bi bi-check-circle-fill"></i>
-              <span>Active Customer</span>
-            </div>
-          <!-- </div>  
-            <div class="profile-actions">
-              <button class="action-btn primary-btn">
-                <i class="bi bi-pencil"></i> Edit Profile
-              </button>
-              <button class="action-btn secondary-btn">
-                <i class="bi bi-eye"></i> View Details
-              </button>
-            </div> -->
-          </div>
-        </div>
-        <div class="decorative-icon icon-1">
-          <div class="profile-circle">
-  {{ name1 ? name1.charAt(0).toUpperCase() : '?' }}
-</div>
+<div class="profile-container">
+  <div class="profile-header">
+    <h1>Profile Information</h1>
+    <p>Manage your account details and preferences</p>
+  </div>
+  
+  <div class="profile-content">
+    <!-- Profile Card -->
+    <div class="profile-card">
+      <div class="profile-banner"></div>
+      <div class="profile-avatar">
+        <div class="profile-circle">
+          {{ getInitials() }}
         </div>
       </div>
-      
-      <!-- Right Column - Info Cards -->
-      <div class="info-cards">
-        <!-- Personal Information Card -->
-        <div class="info-card">
-          <div class="shape-1"></div>
-          <div class="card-header">
-            <i class="bi bi-person-lines-fill"></i>
-            <h3>Personal Information</h3>
+      <div class="profile-info">
+        <h2 class="profile-name">{{ name1 }}</h2>
+        <div class="profile-details">
+          <div class="detail-item">
+            <i class="bi bi-person-badge"></i>
+            <span>Customer ID: {{ customerId }}</span>
           </div>
-          <div class="card-content">
-            <div class="info-grid">
-              <div class="info-item">
-                <div class="info-label">First Name</div>
-                <div class="info-value">{{ name1 }}</div>
-              </div>
-              <div class="info-item">
-                <div class="info-label">House Number</div>
-                <div class="info-value">{{ street_house }}</div>
-              </div>
-              <div class="info-item">
-                <div class="info-label">City</div>
-                <div class="info-value">{{ city }}</div>
-              </div>
-              <div class="info-item">
-                <div class="info-label">Postal Code</div>
-                <div class="info-value">{{ postal_code }}</div>
-              </div>
+          <div class="detail-item">
+            <i class="bi bi-geo-alt"></i>
+            <span>{{ city }}</span>
+          </div>
+          <div class="user-status">
+            <i class="bi bi-check-circle-fill"></i>
+            <span>Active Customer</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Information Cards -->
+    <div class="info-cards">
+      <!-- Personal Information -->
+      <div class="info-card">
+        <div class="card-header">
+          <i class="bi bi-person-lines-fill"></i>
+          <h3>Personal Information</h3>
+        </div>
+        <div class="card-content">
+          <div class="info-grid">
+            <div class="info-item">
+              <label>Full Name</label>
+              <span>{{ name1 }}</span>
+            </div>
+            <div class="info-item">
+              <label>Customer ID</label>
+              <span>{{ customerId }}</span>
+            </div>
+            <div class="info-item">
+              <label>City</label>
+              <span>{{ city }}</span>
+            </div>
+            <div class="info-item">
+              <label>Postal Code</label>
+              <span>{{ postal_code }}</span>
             </div>
           </div>
         </div>
-                
-        <!-- Other Details Card -->
-        <div class="info-card">
-          <div class="shape-2"></div>
-          <div class="card-header">
-            <i class="bi bi-info-circle"></i>
-            <h3>Other Details</h3>
-          </div>
-          <div class="card-content">
-            <div class="info-grid">
-              <div class="info-item">
-                <div class="info-label">Address Number</div>
-                <div class="info-value">{{ address_number }}</div>
-              </div>
-              <div class="info-item">
-                <div class="info-label">Valid From</div>
-                <div class="info-value">{{ Valid_from }}</div>
-              </div>
-              <div class="info-item">
-                <div class="info-label">Valid To</div>
-                <div class="info-value">{{ Valid_to }}</div>
-              </div>
+      </div>
+
+      <!-- Address Information -->
+      <div class="info-card">
+        <div class="card-header">
+          <i class="bi bi-geo-alt-fill"></i>
+          <h3>Address Details</h3>
+        </div>
+        <div class="card-content">
+          <div class="info-grid">
+            <div class="info-item">
+              <label>House Number</label>
+              <span>{{ street_house }}</span>
             </div>
-          </div>
-          <div class="decorative-icon icon-2">
-            <i class="bi bi-file-earmark-text"></i>
+            <div class="info-item">
+              <label>Address Number</label>
+              <span>{{ address_number }}</span>
+            </div>
+            <div class="info-item">
+              <label>Valid From</label>
+              <span>{{ Valid_from }}</span>
+            </div>
+            <div class="info-item">
+              <label>Valid To</label>
+              <span>{{ Valid_to }}</span>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-</body>
+</div>

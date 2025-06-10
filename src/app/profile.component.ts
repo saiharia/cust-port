@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule} from '@angular/common';
-import { SideNavBarComponent } from "./side-nav-bar/side-nav-bar.component";
 import { RouterModule } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 
@@ -21,8 +20,9 @@ export class ProfileComponent implements OnInit{
   Valid_from = '';
   Valid_to = '';
 
-   constructor(private http: HttpClient) {}
-ngOnInit(): void {
+  constructor(private http: HttpClient) {}
+
+  ngOnInit(): void {
     this.customerId = localStorage.getItem('customerId') || '';
 
     if (!this.customerId) {
@@ -45,12 +45,12 @@ ngOnInit(): void {
       }
     );
   }
-  get initials(): string {
-  if (!this.name1) return '?';
-  const parts = this.name1.trim().split(' ');
-  return parts.length > 1
-    ? parts[0][0].toUpperCase() + parts[1][0].toUpperCase()
-    : parts[0][0].toUpperCase();
-}
 
+  getInitials(): string {
+    if (!this.name1) return '?';
+    const parts = this.name1.trim().split(' ');
+    return parts.length > 1
+      ? parts[0][0].toUpperCase() + parts[1][0].toUpperCase()
+      : parts[0][0].toUpperCase();
+  }
 }
