@@ -1,0 +1,43 @@
+<!-- NAVBAR -->
+<nav class="navbar">
+  
+<div class="logo">
+   <div class="logo">KAAR TECH</div>
+</div>
+  <ul class="nav-links">
+    <li><a routerlink="/about">About Us</a></li>
+    <li><a routerlink="/contact" (click)="openContactPopup()">Contact Us</a></li>
+    <app-contact *ngIf="showContactPopup" (close)="closeContactPopup()"></app-contact>
+  </ul>
+</nav>
+
+<!-- LOGIN FORM -->
+<div class="auth-page">
+  <!-- these three DIVs sit behind your form -->
+   <div class="bg-slide"></div>
+  <div class="bg-slide"></div>
+
+<div class="bg-slide"></div>
+  <div class="auth-box">
+    
+    <h2 class="auth-title">Customer Login</h2>
+    <form (ngSubmit)="login()" class="auth-form">
+      <input [(ngModel)]="customerId" name="customerId" type="text" placeholder="Customer ID" class="auth-input">
+
+      <!-- PASSWORD FIELD WITH TOGGLE -->
+      <div class="password-container">
+         <input [(ngModel)]="password" name="password" type="password" placeholder="Password" class="auth-input">
+
+      </div>
+
+      <button type="submit" class="auth-button">Login</button>
+
+      <!-- RESET PASSWORD -->
+       <div class="reset-options">
+        <a href="#" (click)="resetPassword()">Forgot Password?</a>&nbsp;
+        &nbsp;&nbsp;&nbsp;<a href="#" (click)="resetFields()">Reset</a>
+      </div>
+    </form>
+  </div>
+</div>
+

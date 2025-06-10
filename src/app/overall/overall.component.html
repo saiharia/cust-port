@@ -1,0 +1,186 @@
+<!-- Navbar and Sidebar remain unchanged -->
+<div class="dashboard-layout">
+  <!-- Sidebar and Navbar here -->
+
+
+  <!-- Main Content Area -->
+  <main class="content-area">
+    <div class="content">
+      <div class="page-header">
+        <h1>My Sales Dashboard</h1>
+        <p>Track your orders, inquiries, deliveries, and revenue performance</p>
+      </div>
+
+      <!-- Date Range Selector -->
+
+      <div class="content-wrapper">
+        <!-- Loading State -->
+        <div *ngIf="isLoading" class="loading-state">
+          <i class="bi bi-arrow-repeat spinner"></i>
+          <p>Loading data...</p>
+        </div>
+
+        <!-- Error State -->
+        <div *ngIf="error" class="error-state">
+          <i class="bi bi-exclamation-triangle"></i>
+          <p>{{ error }}</p>
+          <button (click)="loadAllData()">Try Again</button>
+        </div>
+
+        <!-- Loaded Content -->
+        <div *ngIf="!isLoading && !error">
+          <!-- KPIs Section -->
+          <div class="section-block">
+            <h2>Key Performance Indicators</h2>
+            <div class="kpi-cards">
+              <div class="kpi-card">
+                <i class="bi bi-search"></i>
+                <div class="kpi-content">
+                  <h3>Total Inquiries</h3>
+                  <p class="value">{{ kpis.totalInquiries }}</p>
+                </div>
+              </div>
+
+              <div class="kpi-card">
+                <i class="bi bi-cart"></i>
+                <div class="kpi-content">
+                  <h3>Total Orders</h3>
+                  <p class="value">{{ kpis.totalOrders }}</p>
+                </div>
+              </div>
+
+              <div class="kpi-card">
+                <i class="bi bi-truck"></i>
+                <div class="kpi-content">
+                  <h3>Total Deliveries</h3>
+                  <p class="value">{{ kpis.totalDeliveries }}</p>
+                </div>
+              </div>
+
+              <div class="kpi-card">
+                <i class="bi bi-currency-dollar"></i>
+                <div class="kpi-content">
+                  <h3>Total Revenue</h3>
+                  <p class="value">{{ kpis.totalRevenue | currency:'INR' }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Summary Section -->
+          <div class="section-block">
+            <h2>Summary</h2>
+            <div class="kpi-cards secondary">
+              <div class="kpi-card">
+                <i class="bi bi-percent"></i>
+                <div class="kpi-content">
+                  <h3>Delivery Fulfillment Rate</h3>
+                  <p class="value">{{ kpis.deliveryFulfillmentRate | number:'1.1-1' }}%</p>
+                </div>
+              </div>
+
+              <div class="kpi-card">
+                <i class="bi bi-clock"></i>
+                <div class="kpi-content">
+                  <h3>On-Time Delivery Rate</h3>
+                  <p class="value">{{ kpis.onTimeDeliveryRate | number:'1.1-1' }}%</p>
+                </div>
+              </div>
+
+              <div class="kpi-card">
+                <i class="bi bi-calculator"></i>
+                <div class="kpi-content">
+                  <h3>Average Order Value</h3>
+                  <p class="value">{{ kpis.avgOrderValue | currency:'INR' }}</p>
+                </div>
+              </div>
+
+              <div class="kpi-card">
+                <i class="bi bi-exclamation-circle"></i>
+                <div class="kpi-content">
+                  <h3>Pending Deliveries</h3>
+                  <p class="value">{{ kpis.pendingDeliveries }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Inquiries Section -->
+          <div class="section-block">
+            <h2>Inquiries</h2>
+            <div class="chart-card">
+              <h3>Inquiry Trend</h3>
+              <canvas baseChart
+                [data]="inquiryTrendData"
+                [options]="chartOptions"
+                type="line">
+              </canvas>
+            </div>
+          </div>
+
+           <div class="section-block">
+            <h2>Inquiries</h2>
+            <div class="chart-card">
+              <h3>Inquiry Trend</h3>
+              <canvas baseChart
+                [data]="inquiryTrendData"
+                [options]="{ responsive: true }"
+                type="pie">
+              </canvas>
+            </div>
+          </div>
+
+          <!-- Deliveries Section -->
+          <div class="section-block">
+            <h2>Deliveries</h2>
+            <div class="charts-section">
+              <div class="chart-card">
+                <h3>Delivery Status Distribution</h3>
+                <canvas baseChart
+                  [data]="deliveryStatusData"
+                  [options]="{ responsive: true }"
+                  type="pie">
+                </canvas>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sales Section -->
+          <div class="section-block">
+            <h2>Sales</h2>
+            <div class="chart-card">
+              <h3>Sales Revenue Trend</h3>
+              <canvas baseChart
+                [data]="salesTrendData"
+                [options]="chartOptions"
+                type="line">
+              </canvas>
+            </div>
+
+            <div class="products-section">
+              <h3>Top 5 Products</h3>
+              <div class="table-wrapper">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Product Code</th>
+                      <th>Units Sold</th>
+                      <th>Revenue</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let product of getTopProducts()">
+                      <td>{{ product.product }}</td>
+                      <td>{{ product.units }}</td>
+                      <td>{{ product.revenue | currency:'INR' }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>

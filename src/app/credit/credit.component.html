@@ -1,0 +1,83 @@
+
+<body>
+  <div class="inquiry-container">
+    <div class="header">
+      <h2>CREDIT</h2>
+      <div class="search-container">
+        <label for="search-input">Search:</label>
+        <input 
+          id="search-input"
+          type="text" 
+          [(ngModel)]="searchText" 
+          (ngModelChange)="currentPage = 1" 
+          placeholder="Enter any value to search" 
+        />
+        <button class="search-btn">
+          <i class="bi bi-search"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th *ngFor="let header of headers; let i = index" (click)="sort(names[i])">
+              {{ header }}
+              <span class="sort-icon">
+                <ng-container *ngIf="key === names[i]">
+                  <i class="bi" [ngClass]="reverse ? 'bi-sort-down' : 'bi-sort-up'"></i>
+                </ng-container>
+                <ng-container *ngIf="key !== names[i]">
+                  <i class="bi bi-filter" style="opacity: 0.3;"></i>
+                </ng-container>
+              </span>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngIf="paginatedData && paginatedData.length > 0; else noData">
+            <tr *ngFor="let row of paginatedData; let idx = index">
+              <td *ngFor="let col of names">
+                <ng-container *ngIf="col === 'status'; else normalCell">
+                  <span class="status" [ngClass]="'status-' + row[col].toLowerCase()">
+                    {{ row[col] }}
+                  </span>
+                </ng-container>
+                <ng-template #normalCell>
+                  {{ row[col] }}
+                </ng-template>
+              </td>
+            </tr>
+          </ng-container>
+          <ng-template #noData>
+            <tr>
+              <td [attr.colspan]="headers.length" class="empty-state">
+                <i class="bi bi-inbox"></i>
+                <p>No inquiry data found. Try adjusting your search criteria.</p>
+              </td>
+            </tr>
+          </ng-template>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="pagination-controls">
+      <button (click)="currentPage = 1" [disabled]="currentPage === 1">
+        <i class="bi bi-chevron-double-left"></i> First
+      </button>
+      <button (click)="currentPage = currentPage - 1" [disabled]="currentPage === 1">
+        <i class="bi bi-chevron-left"></i> Prev
+      </button>
+      <span class="page-info">
+        Page {{ currentPage }} of {{ totalPages }}
+      </span>
+      <button (click)="currentPage = currentPage + 1" [disabled]="currentPage === totalPages">
+        Next <i class="bi bi-chevron-right"></i>
+      </button>
+      <button (click)="currentPage = totalPages" [disabled]="currentPage === totalPages">
+        Last <i class="bi bi-chevron-double-right"></i>
+      </button>
+    </div>
+  </div>
+</body>
