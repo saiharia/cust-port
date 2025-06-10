@@ -14,7 +14,6 @@ import { CreditComponent } from './credit/credit.component';
 import { InvoicelistComponent } from './invoicelist/invoicelist.component';
 import { OverallComponent } from './overall/overall.component';
 
-
 export const routes: Routes = [
   {
     path: '',
@@ -25,7 +24,18 @@ export const routes: Routes = [
     path: 'login',
     loadComponent: () => import('./login.component').then(m => m.LoginComponent)
   },
- 
+  {
+    path: 'inquiry-detail',
+    loadComponent: () => import('./inquiry/inquiry-detail/inquiry-detail.component').then(m => m.InquiryDetailComponent)
+  },
+  {
+    path: 'sales-detail',
+    loadComponent: () => import('./sales-order/sales-detail/sales-detail.component').then(m => m.SalesDetailComponent)
+  },
+  {
+    path: 'delivery-detail',
+    loadComponent: () => import('./list-of-deliveries/delivery-detail/delivery-detail.component').then(m => m.DeliveryDetailComponent)
+  },
   {
     path: '',
     component: SideNavBarComponent,
@@ -43,11 +53,6 @@ export const routes: Routes = [
       { path: 'shelp', component: ShelpComponent },
       { path: 'credit', component: CreditComponent },
       { path: 'overall', component: OverallComponent },
-      
     ]
   },
-      { path: 'dashboard', component: DashboardComponent },
-      { path: 'credit', component: CreditComponent },
-
-
 ];

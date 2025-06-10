@@ -1,18 +1,16 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { FilterPipe } from '../filter.pipe';
 import { HttpClient } from '@angular/common/http';
 import { OrderByPipe } from '../order-by.pipe';
-
 
 interface FilterOption {
   value: string;
   label: string;
   icon: string;
 }
-
 
 @Component({
   selector: 'app-inquiry',
@@ -21,7 +19,7 @@ interface FilterOption {
   styleUrl: './inquiry.component.scss'
 })
 export class InquiryComponent {
- INQUIRY: any[] = [];
+  INQUIRY: any[] = [];
   filteredData: any[] = [];
   searchText: string = '';
   key: string = '';
@@ -32,18 +30,18 @@ export class InquiryComponent {
   activeFilter: string = 'all';
 
   headers = [
-  "Sales Document", "Creation Date", "Created By", "Organization", "Distribution Channel",
-  "Division", "Processing Status", "Sales Item", "Item name",
-  "Material Number", "Order Quantity", "Sales Unit",
-  "Valid From", "Valid Until", "Action"  // Added Action column
-];
+    "Sales Document", "Creation Date", "Created By", "Organization", "Distribution Channel",
+    "Division", "Processing Status", "Sales Item", "Item name",
+    "Material Number", "Order Quantity", "Sales Unit",
+    "Valid From", "Valid Until", "Action"
+  ];
 
-names = [
-  "VBELN", "ERDAT", "ERNAM", "VKORG", "VTWEG",
-  "SPART", "GBSTK", "POSNR", "ARKTX",
-  "MATNR", "KWMENG", "VRKME", 
-  "ANGDT", "BNDDT", "action"  // Added action field
-];
+  names = [
+    "VBELN", "ERDAT", "ERNAM", "VKORG", "VTWEG",
+    "SPART", "GBSTK", "POSNR", "ARKTX",
+    "MATNR", "KWMENG", "VRKME", 
+    "ANGDT", "BNDDT", "action"
+  ];
 
   filters = [
     { value: 'all', label: 'All Documents', icon: 'bi bi-calendar' },
@@ -58,11 +56,12 @@ names = [
     '': { class: 'status-unknown', text: 'Unknown' }
   };
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router: Router) {}
 
   totalDocuments: number = 0;
   completedCount: number = 0;
   pendingCount: number = 0;
+
   ngOnInit(): void {
     this.customerId = localStorage.getItem('customerId') || '';
     if (!this.customerId) {
@@ -72,6 +71,7 @@ names = [
 
     this.fetchInquiryData();
   }
+
   private updateCounts(): void {
     this.totalDocuments = this.INQUIRY.length;
     this.completedCount = this.INQUIRY.filter(item => item.GBSTK === 'C').length;
@@ -79,16 +79,16 @@ names = [
   }
 
   private fetchInquiryData(): void {
-  this.http.post<any>('http://localhost:3000/inquiry', { customerId: this.customerId })
-    .subscribe({
-      next: (data) => {
-        this.INQUIRY = data.inquiries || [];
-        this.filteredData = [...this.INQUIRY];
-        this.updateCounts(); // Add this line
-      },
-      error: (error) => console.error('Error fetching inquiry data', error)
-    });
-}
+    this.http.post<any>('http://localhost:3000/inquiry', { customerId: this.customerId })
+      .subscribe({
+        next: (data) => {
+          this.INQUIRY = data.inquiries || [];
+          this.filteredData = [...this.INQUIRY];
+          this.updateCounts();
+        },
+        error: (error) => console.error('Error fetching inquiry data', error)
+      });
+  }
 
   onSearchChange(): void {
     this.currentPage = 1;
@@ -271,43 +271,39 @@ names = [
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
   }
-  viewDetails(row: any): void {
-  // You'll need to implement your navigation logic here
-  // For example, using Angular Router:
-  // this.router.navigate(['/order-details', row.VBELN]);
-  console.log('View details for:', row);
-  
-  // For now, we'll just show the grouped data in a modal/dialog
-  this.showOrderDetails(row);
-}
 
-private showOrderDetails(order: any): void {
-  // This is just an example - you can format this however you like
-  const groupedDetails = {
-    headerInfo: {
-      document: order.VBELN,
-      createdOn: order.ERDAT,
-      createdBy: order.ERNAM,
-      status: this.getStatusText(order.GBSTK)
-    },
-    organizationInfo: {
-      org: order.VKORG,
-      channel: order.VTWEG,
-      division: order.SPART
-    },
-    itemDetails: {
-      name: order.ARKTX,
-      material: order.MATNR,
-      quantity: order.KWMENG,
-      unit: order.VRKME
-    },
-    validity: {
-      from: order.ANGDT,
-      to: order.BNDDT
-    }
-  };
-  
-  console.log('Grouped Order Details:', groupedDetails);
-  // You would typically pass this to a dialog component or navigation
-}
+  viewDetails(row: any): void {
+    // Navigate to inquiry detail page with data
+    this.router.navigate(['/inquiry-detail'], {
+      state: { inquiryData: row }
+    });
+  }
+
+  private showOrderDetails(order: any): void {
+    const groupedDetails = {
+      headerInfo: {
+        document: order.VBELN,
+        createdOn: order.ERDAT,
+        createdBy: order.ERNAM,
+        status: this.getStatusText(order.GBSTK)
+      },
+      organizationInfo: {
+        org: order.VKORG,
+        channel: order.VTWEG,
+        division: order.SPART
+      },
+      itemDetails: {
+        name: order.ARKTX,
+        material: order.MATNR,
+        quantity: order.KWMENG,
+        unit: order.VRKME
+      },
+      validity: {
+        from: order.ANGDT,
+        to: order.BNDDT
+      }
+    };
+    
+    console.log('Grouped Order Details:', groupedDetails);
+  }
 }
