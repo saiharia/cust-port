@@ -4,23 +4,29 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { NgChartsModule } from 'ng2-charts';
 import { ChartConfiguration, ChartData } from 'chart.js';
-import { DataService } from '../services/data.service'; // ✅ Update path if needed
+import { DataService } from '../services/data.service';
 
 @Component({
-  selector: 'app-overall', // ✅ Update selector
+  selector: 'app-overall',
   standalone: true,
   imports: [CommonModule, FormsModule, RouterLink, RouterLinkActive, NgChartsModule],
-  templateUrl: './overall.component.html', // ✅ Your HTML file
-  styleUrls: ['./overall.component.scss'] // ✅ Your SCSS file
+  templateUrl: './overall.component.html',
+  styleUrls: ['./overall.component.scss']
 })
 export class OverallComponent implements OnInit {
-    salesData: any[] = [];
+  salesData: any[] = [];
   inquiryData: any[] = [];
   deliveryData: any[] = [];
   isLoading = true;
   error = '';
   dateRange = 'month';
-  activeTab = 'summary';
+
+  dateRanges = [
+    { value: 'week', label: 'Last 7 Days' },
+    { value: 'month', label: 'Last 30 Days' },
+    { value: 'quarter', label: 'Last 3 Months' },
+    { value: 'year', label: 'Last Year' }
+  ];
 
   kpis = {
     totalInquiries: 0,
@@ -36,21 +42,27 @@ export class OverallComponent implements OnInit {
 
   // Chart Configurations
   inquiryTrendData: ChartConfiguration['data'] = {
-    labels: ['biscuit', 'coffee', 'food', 'sandwich veg'],
+    labels: [],
     datasets: [{
       data: [],
-      label: 'Inquiries',
-      
-      backgroundColor: ['#388e3c', '#f57c00', '#1a237e', '#4BC0C0'],
-      fill: true
+      backgroundColor: [
+        '#0078d4', '#00bcf2', '#00b294', '#ffb900', 
+        '#ff8c00', '#d13438', '#8764b8', '#605e5c'
+      ],
+      borderWidth: 0,
+      hoverBorderWidth: 2,
+      hoverBorderColor: '#ffffff'
     }]
   };
 
   deliveryStatusData: ChartData = {
-    labels: ['Completed', 'Pending', 'In Transit'],
+    labels: ['Completed', 'In Transit', 'Pending'],
     datasets: [{
       data: [0, 0, 0],
-      backgroundColor: ['#388e3c', '#f57c00', '#1a237e']
+      backgroundColor: ['#00b294', '#ffb900', '#d13438'],
+      borderWidth: 0,
+      hoverBorderWidth: 2,
+      hoverBorderColor: '#ffffff'
     }]
   };
 
@@ -58,17 +70,88 @@ export class OverallComponent implements OnInit {
     labels: [],
     datasets: [{
       data: [],
-      label: 'Sales Revenue',
-      borderColor: '#1a237e',
-      backgroundColor: 'rgba(26, 35, 126, 0.2)',
-      fill: true
+      label: 'Revenue',
+      borderColor: '#0078d4',
+      backgroundColor: 'rgba(0, 120, 212, 0.1)',
+      fill: true,
+      tension: 0.4,
+      pointBackgroundColor: '#0078d4',
+      pointBorderColor: '#ffffff',
+      pointBorderWidth: 2,
+      pointRadius: 6,
+      pointHoverRadius: 8
     }]
   };
 
-  chartOptions: ChartConfiguration['options'] = {
+  pieChartOptions: ChartConfiguration['options'] = {
     responsive: true,
-    scales: { y: { beginAtZero: true } },
-    plugins: { legend: { display: true } }
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: 'bottom',
+        labels: {
+          padding: 20,
+          usePointStyle: true,
+          font: { size: 12 }
+        }
+      },
+      tooltip: {
+        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+        titleColor: '#ffffff',
+        bodyColor: '#ffffff',
+        cornerRadius: 8,
+        displayColors: true
+      }
+    }
+  };
+
+  lineChartOptions: ChartConfiguration['options'] = {
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+      y: {
+        beginAtZero: true,
+        grid: { color: 'rgba(0, 0, 0, 0.1)' },
+        ticks: { font: { size: 11 } }
+      },
+      x: {
+        grid: { color: 'rgba(0, 0, 0, 0.1)' },
+        ticks: { font: { size: 11 } }
+      }
+    },
+    plugins: {
+      legend: {
+        display: false
+      },
+      tooltip: {
+        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+        titleColor: '#ffffff',
+        bodyColor: '#ffffff',
+        cornerRadius: 8
+      }
+    }
+  };
+
+  doughnutChartOptions: ChartConfiguration['options'] = {
+    responsive: true,
+    maintainAspectRatio: false,
+    cutout: '60%',
+    plugins: {
+      legend: {
+        position: 'bottom',
+        labels: {
+          padding: 20,
+          usePointStyle: true,
+          font: { size: 12 }
+        }
+      },
+      tooltip: {
+        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+        titleColor: '#ffffff',
+        bodyColor: '#ffffff',
+        cornerRadius: 8
+      }
+    }
   };
 
   constructor(private dataService: DataService) {}
@@ -78,6 +161,9 @@ export class OverallComponent implements OnInit {
   }
 
   loadAllData(): void {
+    this.isLoading = true;
+    this.error = '';
+    
     const customerId = localStorage.getItem('customerId');
 
     if (!customerId) {
@@ -99,7 +185,7 @@ export class OverallComponent implements OnInit {
       this.updateCharts();
       this.isLoading = false;
     }).catch(error => {
-      this.error = 'Failed to load data. Please try again later.';
+      this.error = 'Failed to load analytics data. Please try again.';
       console.error('Error loading data:', error);
       this.isLoading = false;
     });
@@ -122,7 +208,7 @@ export class OverallComponent implements OnInit {
       sum + (parseFloat(d.LFIMG) || 0), 0);
 
     this.kpis.deliveryFulfillmentRate = totalOrdered ?
-      (totalDelivered / totalOrdered) * 100 : 0;
+      Math.min((totalDelivered / totalOrdered) * 100, 100) : 0;
 
     const onTime = this.deliveryData.filter(del => {
       const lfd = new Date(del.LFDAT);
@@ -131,14 +217,6 @@ export class OverallComponent implements OnInit {
     }).length;
     this.kpis.onTimeDeliveryRate = this.kpis.totalDeliveries ?
       (onTime / this.kpis.totalDeliveries) * 100 : 0;
-
-    const revenueByCustomer = new Map<string, number>();
-    this.salesData.forEach(order => {
-      const val = revenueByCustomer.get(order.KUNNR) || 0;
-      revenueByCustomer.set(order.KUNNR, val + (parseFloat(order.NETWR) || 0));
-    });
-    this.kpis.topCustomer = Array.from(revenueByCustomer.entries())
-      .sort(([, a], [, b]) => b - a)[0]?.[0] || '';
 
     this.kpis.pendingDeliveries = this.deliveryData.filter(del =>
       del.GBSTK !== 'C').length;
@@ -172,45 +250,38 @@ export class OverallComponent implements OnInit {
   updateDeliveryStatus(): void {
     const statusCounts = {
       completed: 0,
-      pending: 0,
-      inTransit: 0
+      inTransit: 0,
+      pending: 0
     };
 
     this.deliveryData.forEach(delivery => {
       switch (delivery.GBSTK) {
         case 'C': statusCounts.completed++; break;
-        case 'B': statusCounts.pending++; break;
-        case 'A': statusCounts.inTransit++; break;
-        default: statusCounts.inTransit++; break;
+        case 'B': statusCounts.inTransit++; break;
+        case 'A': statusCounts.pending++; break;
+        default: statusCounts.pending++; break;
       }
     });
 
     this.deliveryStatusData.datasets[0].data = [
       statusCounts.completed,
-      statusCounts.pending,
-      statusCounts.inTransit
+      statusCounts.inTransit,
+      statusCounts.pending
     ];
   }
 
   updateSalesTrend(): void {
-    const dailyMap = new Map<string, { total: number, count: number }>();
+    const dailyMap = new Map<string, number>();
 
-    for (const sale of this.salesData) {
+    this.salesData.forEach(sale => {
       const date = new Date(sale.ERDAT).toISOString().split('T')[0];
       const revenue = parseFloat(sale.NETWR) || 0;
-
-      const entry = dailyMap.get(date) || { total: 0, count: 0 };
-      entry.total += revenue;
-      entry.count += 1;
-      dailyMap.set(date, entry);
-    }
-
-    const sortedDates = Array.from(dailyMap.keys()).sort();
-    const labels = sortedDates;
-    const data = sortedDates.map(date => {
-      const { total, count } = dailyMap.get(date)!;
-      return total / count;
+      dailyMap.set(date, (dailyMap.get(date) || 0) + revenue);
     });
+
+    const sortedDates = Array.from(dailyMap.keys()).sort().slice(-7); // Last 7 days
+    const labels = sortedDates.map(date => new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
+    const data = sortedDates.map(date => dailyMap.get(date) || 0);
 
     this.salesTrendData.labels = labels;
     this.salesTrendData.datasets[0].data = data;
@@ -221,14 +292,10 @@ export class OverallComponent implements OnInit {
     this.updateCharts();
   }
 
-  setActiveTab(tab: string): void {
-    this.activeTab = tab;
-  }
-
   getTopProducts(): any[] {
     const productMap = new Map<string, { units: number, revenue: number }>();
     this.salesData.forEach(o => {
-      const key = o.MATNR;
+      const key = o.MATNR || 'Unknown';
       const current = productMap.get(key) || { units: 0, revenue: 0 };
       productMap.set(key, {
         units: current.units + (parseFloat(o.KWMENG) || 0),
@@ -240,5 +307,30 @@ export class OverallComponent implements OnInit {
       .map(([product, data]) => ({ product, ...data }))
       .sort((a, b) => b.revenue - a.revenue)
       .slice(0, 5);
+  }
+
+  exportKPIs(): void {
+    const kpiData = {
+      'Total Inquiries': this.kpis.totalInquiries,
+      'Total Orders': this.kpis.totalOrders,
+      'Total Deliveries': this.kpis.totalDeliveries,
+      'Total Revenue': this.kpis.totalRevenue,
+      'Delivery Fulfillment Rate': `${this.kpis.deliveryFulfillmentRate.toFixed(1)}%`,
+      'On-Time Delivery Rate': `${this.kpis.onTimeDeliveryRate.toFixed(1)}%`,
+      'Average Order Value': this.kpis.avgOrderValue,
+      'Pending Deliveries': this.kpis.pendingDeliveries
+    };
+
+    const csvContent = Object.entries(kpiData)
+      .map(([key, value]) => `"${key}","${value}"`)
+      .join('\n');
+
+    const blob = new Blob([`Metric,Value\n${csvContent}`], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `kpi_report_${new Date().toISOString().split('T')[0]}.csv`;
+    link.click();
+    URL.revokeObjectURL(url);
   }
 }

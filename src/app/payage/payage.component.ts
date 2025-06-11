@@ -16,21 +16,14 @@ export class PayageComponent {
   reverse: boolean = false;
   customerId = '';
 
-  toggleSidebar() {
-    document.body.classList.toggle('sidebar-open');
-  }
-
   headers = [
-     "Billing Number", "Billing Date","	Due Date ", "Aging", "Payment status", "	Division",
-    "	Net Value", "	Currency", "	Payment Terms","	Sales Organization",
-    "	Distribution Channel"
+    "Billing Number", "Billing Date", "Due Date", "Aging", "Payment Status", "Division",
+    "Net Value", "Currency", "Payment Terms", "Sales Organization", "Distribution Channel"
   ];
 
   names = [
-    "VBELN", "FKDAT",
-    "DUE_DATE", "AGING", "PAYMENT_STATUS", "SPART",
-    "NETWR", "WAERK", "ZTERM" ,"VKORG",
-    "VTWEG"
+    "VBELN", "FKDAT", "DUE_DATE", "AGING", "PAYMENT_STATUS", "SPART",
+    "NETWR", "WAERK", "ZTERM", "VKORG", "VTWEG"
   ];
 
   constructor(private http: HttpClient) {}
@@ -45,15 +38,45 @@ export class PayageComponent {
 
     this.http.post<any>('http://localhost:3000/payage', { customerId: this.customerId }).subscribe(
       (data: any) => {
-        this.PAYAGE = data.payage;
+        this.PAYAGE = data.payage || [];
       },
       error => {
-        console.error('Error fetching sales data', error);
+        console.error('Error fetching payment data', error);
       }
     );
   }
 
+  getThisMonthCount(): number {
+    const currentMonth = new Date().getMonth();
+    const currentYear = new Date().getFullYear();
+    return this.PAYAGE.filter(item => {
+      const itemDate = new Date(item.FKDAT);
+      return itemDate.getMonth() === currentMonth && itemDate.getFullYear() === currentYear;
+    }).length;
+  }
+
+  getAgingCount(): number {
+    return this.PAYAGE.filter(item => {
+      const aging = parseInt(item.AGING) || 0;
+      return aging > 30; // Items older than 30 days
+    }).length;
+  }
+
+  getTotalValue(): number {
+    return this.PAYAGE.reduce((sum, item) => sum + (parseFloat(item.NETWR) || 0), 0);
+  }
+
+  getStatusClass(status: string): string {
+    const statusMap: Record<string, string> = {
+      'PAID': 'status-paid',
+      'PENDING': 'status-pending',
+      'OVERDUE': 'status-overdue'
+    };
+    return statusMap[status?.toUpperCase()] || 'status-pending';
+  }
+
   sort(key: string): void {
+    this.currentPage = 1;
     if (this.key === key) {
       this.reverse = !this.reverse;
     } else {
@@ -61,25 +84,26 @@ export class PayageComponent {
       this.reverse = false;
     }
   }
-    currentPage = 1;
-itemsPerPage = 5;
 
-get paginatedData() {
-  const start = (this.currentPage - 1) * this.itemsPerPage;
-  return this.PAYAGE
-    .filter(row => JSON.stringify(row).toLowerCase().includes(this.searchText?.toLowerCase() || ''))
-    .sort((a, b) => {
-      if (!this.key) return 0;
-      return this.reverse
-        ? (a[this.key] > b[this.key] ? -1 : 1)
-        : (a[this.key] < b[this.key] ? -1 : 1);
-    })
-    .slice(start, start + this.itemsPerPage);
-}
+  currentPage = 1;
+  itemsPerPage = 7;
 
-get totalPages() {
-  return Math.ceil(
-    this.PAYAGE.filter(row => JSON.stringify(row).toLowerCase().includes(this.searchText?.toLowerCase() || '')).length / this.itemsPerPage
-  );
-}
+  get paginatedData() {
+    const start = (this.currentPage - 1) * this.itemsPerPage;
+    return this.PAYAGE
+      .filter(row => JSON.stringify(row).toLowerCase().includes(this.searchText?.toLowerCase() || ''))
+      .sort((a, b) => {
+        if (!this.key) return 0;
+        return this.reverse
+          ? (a[this.key] > b[this.key] ? -1 : 1)
+          : (a[this.key] < b[this.key] ? -1 : 1);
+      })
+      .slice(start, start + this.itemsPerPage);
+  }
+
+  get totalPages() {
+    return Math.ceil(
+      this.PAYAGE.filter(row => JSON.stringify(row).toLowerCase().includes(this.searchText?.toLowerCase() || '')).length / this.itemsPerPage
+    );
+  }
 }

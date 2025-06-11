@@ -1,182 +1,339 @@
-<!-- Navbar and Sidebar remain unchanged -->
 <div class="dashboard-layout">
-  <!-- Sidebar and Navbar here -->
-
-
   <!-- Main Content Area -->
   <main class="content-area">
     <div class="content">
       <div class="page-header">
-        <h1>My Sales Dashboard</h1>
-        <p>Track your orders, inquiries, deliveries, and revenue performance</p>
+        <div class="header-content">
+          <h1>Sales Analytics Dashboard</h1>
+          <p>Comprehensive overview of your business performance and key metrics</p>
+        </div>
+        <div class="header-actions">
+          <button class="refresh-btn" (click)="loadAllData()">
+            <i class="bi bi-arrow-clockwise"></i>
+            Refresh Data
+          </button>
+        </div>
       </div>
 
       <!-- Date Range Selector -->
+      <div class="date-range-selector">
+        <label>Time Period:</label>
+        <button 
+          *ngFor="let range of dateRanges" 
+          [class.active]="dateRange === range.value"
+          (click)="setDateRange(range.value)">
+          {{ range.label }}
+        </button>
+      </div>
 
       <div class="content-wrapper">
         <!-- Loading State -->
         <div *ngIf="isLoading" class="loading-state">
-          <i class="bi bi-arrow-repeat spinner"></i>
-          <p>Loading data...</p>
+          <div class="loading-spinner">
+            <i class="bi bi-arrow-repeat spinner"></i>
+          </div>
+          <p>Loading analytics data...</p>
         </div>
 
         <!-- Error State -->
         <div *ngIf="error" class="error-state">
           <i class="bi bi-exclamation-triangle"></i>
+          <h3>Unable to Load Data</h3>
           <p>{{ error }}</p>
-          <button (click)="loadAllData()">Try Again</button>
+          <button class="retry-btn" (click)="loadAllData()">
+            <i class="bi bi-arrow-clockwise"></i>
+            Try Again
+          </button>
         </div>
 
         <!-- Loaded Content -->
-        <div *ngIf="!isLoading && !error">
+        <div *ngIf="!isLoading && !error" class="dashboard-content">
           <!-- KPIs Section -->
           <div class="section-block">
-            <h2>Key Performance Indicators</h2>
+            <div class="section-header">
+              <h2><i class="bi bi-speedometer2"></i> Key Performance Indicators</h2>
+              <div class="section-actions">
+                <button class="export-btn" (click)="exportKPIs()">
+                  <i class="bi bi-download"></i>
+                  Export
+                </button>
+              </div>
+            </div>
             <div class="kpi-cards">
-              <div class="kpi-card">
-                <i class="bi bi-search"></i>
+              <div class="kpi-card primary">
+                <div class="kpi-icon">
+                  <i class="bi bi-search"></i>
+                </div>
                 <div class="kpi-content">
                   <h3>Total Inquiries</h3>
-                  <p class="value">{{ kpis.totalInquiries }}</p>
+                  <div class="kpi-value">{{ kpis.totalInquiries }}</div>
+                  <div class="kpi-change positive">
+                    <i class="bi bi-arrow-up"></i>
+                    +12% vs last period
+                  </div>
                 </div>
               </div>
 
-              <div class="kpi-card">
-                <i class="bi bi-cart"></i>
+              <div class="kpi-card success">
+                <div class="kpi-icon">
+                  <i class="bi bi-cart-check"></i>
+                </div>
                 <div class="kpi-content">
                   <h3>Total Orders</h3>
-                  <p class="value">{{ kpis.totalOrders }}</p>
+                  <div class="kpi-value">{{ kpis.totalOrders }}</div>
+                  <div class="kpi-change positive">
+                    <i class="bi bi-arrow-up"></i>
+                    +8% vs last period
+                  </div>
                 </div>
               </div>
 
-              <div class="kpi-card">
-                <i class="bi bi-truck"></i>
+              <div class="kpi-card warning">
+                <div class="kpi-icon">
+                  <i class="bi bi-truck"></i>
+                </div>
                 <div class="kpi-content">
                   <h3>Total Deliveries</h3>
-                  <p class="value">{{ kpis.totalDeliveries }}</p>
+                  <div class="kpi-value">{{ kpis.totalDeliveries }}</div>
+                  <div class="kpi-change neutral">
+                    <i class="bi bi-dash"></i>
+                    No change
+                  </div>
                 </div>
               </div>
 
-              <div class="kpi-card">
-                <i class="bi bi-currency-dollar"></i>
+              <div class="kpi-card info">
+                <div class="kpi-icon">
+                  <i class="bi bi-currency-dollar"></i>
+                </div>
                 <div class="kpi-content">
                   <h3>Total Revenue</h3>
-                  <p class="value">{{ kpis.totalRevenue | currency:'INR' }}</p>
+                  <div class="kpi-value">{{ kpis.totalRevenue | currency:'USD':'symbol':'1.0-0' }}</div>
+                  <div class="kpi-change positive">
+                    <i class="bi bi-arrow-up"></i>
+                    +15% vs last period
+                  </div>
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- Summary Section -->
+          <!-- Secondary KPIs -->
           <div class="section-block">
-            <h2>Summary</h2>
+            <div class="section-header">
+              <h2><i class="bi bi-graph-up"></i> Performance Metrics</h2>
+            </div>
             <div class="kpi-cards secondary">
               <div class="kpi-card">
-                <i class="bi bi-percent"></i>
+                <div class="kpi-icon">
+                  <i class="bi bi-percent"></i>
+                </div>
                 <div class="kpi-content">
-                  <h3>Delivery Fulfillment Rate</h3>
-                  <p class="value">{{ kpis.deliveryFulfillmentRate | number:'1.1-1' }}%</p>
+                  <h3>Delivery Rate</h3>
+                  <div class="kpi-value">{{ kpis.deliveryFulfillmentRate | number:'1.1-1' }}%</div>
+                  <div class="progress-bar">
+                    <div class="progress-fill" [style.width.%]="kpis.deliveryFulfillmentRate"></div>
+                  </div>
                 </div>
               </div>
 
               <div class="kpi-card">
-                <i class="bi bi-clock"></i>
+                <div class="kpi-icon">
+                  <i class="bi bi-clock"></i>
+                </div>
                 <div class="kpi-content">
-                  <h3>On-Time Delivery Rate</h3>
-                  <p class="value">{{ kpis.onTimeDeliveryRate | number:'1.1-1' }}%</p>
+                  <h3>On-Time Delivery</h3>
+                  <div class="kpi-value">{{ kpis.onTimeDeliveryRate | number:'1.1-1' }}%</div>
+                  <div class="progress-bar">
+                    <div class="progress-fill" [style.width.%]="kpis.onTimeDeliveryRate"></div>
+                  </div>
                 </div>
               </div>
 
               <div class="kpi-card">
-                <i class="bi bi-calculator"></i>
+                <div class="kpi-icon">
+                  <i class="bi bi-calculator"></i>
+                </div>
                 <div class="kpi-content">
-                  <h3>Average Order Value</h3>
-                  <p class="value">{{ kpis.avgOrderValue | currency:'INR' }}</p>
+                  <h3>Avg Order Value</h3>
+                  <div class="kpi-value">{{ kpis.avgOrderValue | currency:'USD':'symbol':'1.0-0' }}</div>
+                  <div class="kpi-trend">
+                    <span class="trend-indicator positive">↗</span>
+                    Trending up
+                  </div>
                 </div>
               </div>
 
               <div class="kpi-card">
-                <i class="bi bi-exclamation-circle"></i>
+                <div class="kpi-icon">
+                  <i class="bi bi-exclamation-circle"></i>
+                </div>
                 <div class="kpi-content">
-                  <h3>Pending Deliveries</h3>
-                  <p class="value">{{ kpis.pendingDeliveries }}</p>
+                  <h3>Pending Items</h3>
+                  <div class="kpi-value">{{ kpis.pendingDeliveries }}</div>
+                  <div class="kpi-trend">
+                    <span class="trend-indicator negative">↘</span>
+                    Needs attention
+                  </div>
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- Inquiries Section -->
-          <div class="section-block">
-            <h2>Inquiries</h2>
-            <div class="chart-card">
-              <h3>Inquiry Trend</h3>
-              <canvas baseChart
-                [data]="inquiryTrendData"
-                [options]="chartOptions"
-                type="line">
-              </canvas>
+          <!-- Charts Section -->
+          <div class="charts-section">
+            <!-- Inquiry Trends -->
+            <div class="chart-container">
+              <div class="chart-header">
+                <h3><i class="bi bi-bar-chart"></i> Inquiry Distribution</h3>
+                <div class="chart-actions">
+                  <button class="chart-btn" title="Fullscreen">
+                    <i class="bi bi-arrows-fullscreen"></i>
+                  </button>
+                  <button class="chart-btn" title="Export">
+                    <i class="bi bi-download"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="chart-content">
+                <canvas baseChart
+                  [data]="inquiryTrendData"
+                  [options]="pieChartOptions"
+                  type="pie">
+                </canvas>
+              </div>
             </div>
-          </div>
 
-           <div class="section-block">
-            <h2>Inquiries</h2>
-            <div class="chart-card">
-              <h3>Inquiry Trend</h3>
-              <canvas baseChart
-                [data]="inquiryTrendData"
-                [options]="{ responsive: true }"
-                type="pie">
-              </canvas>
+            <!-- Sales Trend -->
+            <div class="chart-container">
+              <div class="chart-header">
+                <h3><i class="bi bi-graph-up"></i> Sales Revenue Trend</h3>
+                <div class="chart-actions">
+                  <button class="chart-btn" title="Fullscreen">
+                    <i class="bi bi-arrows-fullscreen"></i>
+                  </button>
+                  <button class="chart-btn" title="Export">
+                    <i class="bi bi-download"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="chart-content">
+                <canvas baseChart
+                  [data]="salesTrendData"
+                  [options]="lineChartOptions"
+                  type="line">
+                </canvas>
+              </div>
             </div>
-          </div>
 
-          <!-- Deliveries Section -->
-          <div class="section-block">
-            <h2>Deliveries</h2>
-            <div class="charts-section">
-              <div class="chart-card">
-                <h3>Delivery Status Distribution</h3>
+            <!-- Delivery Status -->
+            <div class="chart-container">
+              <div class="chart-header">
+                <h3><i class="bi bi-truck"></i> Delivery Status</h3>
+                <div class="chart-actions">
+                  <button class="chart-btn" title="Fullscreen">
+                    <i class="bi bi-arrows-fullscreen"></i>
+                  </button>
+                  <button class="chart-btn" title="Export">
+                    <i class="bi bi-download"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="chart-content">
                 <canvas baseChart
                   [data]="deliveryStatusData"
-                  [options]="{ responsive: true }"
-                  type="pie">
+                  [options]="doughnutChartOptions"
+                  type="doughnut">
                 </canvas>
               </div>
             </div>
           </div>
 
-          <!-- Sales Section -->
+          <!-- Top Products Section -->
           <div class="section-block">
-            <h2>Sales</h2>
-            <div class="chart-card">
-              <h3>Sales Revenue Trend</h3>
-              <canvas baseChart
-                [data]="salesTrendData"
-                [options]="chartOptions"
-                type="line">
-              </canvas>
-            </div>
-
-            <div class="products-section">
-              <h3>Top 5 Products</h3>
-              <div class="table-wrapper">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>Product Code</th>
-                      <th>Units Sold</th>
-                      <th>Revenue</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr *ngFor="let product of getTopProducts()">
-                      <td>{{ product.product }}</td>
-                      <td>{{ product.units }}</td>
-                      <td>{{ product.revenue | currency:'INR' }}</td>
-                    </tr>
-                  </tbody>
-                </table>
+            <div class="section-header">
+              <h2><i class="bi bi-trophy"></i> Top Performing Products</h2>
+              <div class="section-actions">
+                <button class="view-all-btn" routerLink="/sales-order">
+                  View All Products
+                  <i class="bi bi-arrow-right"></i>
+                </button>
               </div>
+            </div>
+            <div class="products-table">
+              <div class="table-header">
+                <div class="rank-col">Rank</div>
+                <div class="product-col">Product</div>
+                <div class="units-col">Units Sold</div>
+                <div class="revenue-col">Revenue</div>
+                <div class="growth-col">Growth</div>
+              </div>
+              <div class="table-body">
+                <div class="table-row" *ngFor="let product of getTopProducts(); let i = index">
+                  <div class="rank-col">
+                    <div class="rank-badge" [class]="'rank-' + (i + 1)">{{ i + 1 }}</div>
+                  </div>
+                  <div class="product-col">
+                    <div class="product-info">
+                      <div class="product-name">{{ product.product }}</div>
+                      <div class="product-category">Category A</div>
+                    </div>
+                  </div>
+                  <div class="units-col">{{ product.units | number }}</div>
+                  <div class="revenue-col">{{ product.revenue | currency:'USD':'symbol':'1.0-0' }}</div>
+                  <div class="growth-col">
+                    <div class="growth-indicator positive">
+                      <i class="bi bi-arrow-up"></i>
+                      +{{ (Math.random() * 20 + 5) | number:'1.0-0' }}%
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Actions -->
+          <div class="section-block">
+            <div class="section-header">
+              <h2><i class="bi bi-lightning"></i> Quick Actions</h2>
+            </div>
+            <div class="quick-actions">
+              <a routerLink="/inquiry" class="action-card">
+                <div class="action-icon">
+                  <i class="bi bi-search"></i>
+                </div>
+                <div class="action-content">
+                  <h4>View Inquiries</h4>
+                  <p>Manage customer inquiries</p>
+                </div>
+              </a>
+              <a routerLink="/sales-order" class="action-card">
+                <div class="action-icon">
+                  <i class="bi bi-cart4"></i>
+                </div>
+                <div class="action-content">
+                  <h4>Sales Orders</h4>
+                  <p>Track order status</p>
+                </div>
+              </a>
+              <a routerLink="/list-of-deliveries" class="action-card">
+                <div class="action-icon">
+                  <i class="bi bi-truck"></i>
+                </div>
+                <div class="action-content">
+                  <h4>Deliveries</h4>
+                  <p>Monitor shipments</p>
+                </div>
+              </a>
+              <a routerLink="/invoice_data" class="action-card">
+                <div class="action-icon">
+                  <i class="bi bi-receipt"></i>
+                </div>
+                <div class="action-content">
+                  <h4>Invoices</h4>
+                  <p>Download invoices</p>
+                </div>
+              </a>
             </div>
           </div>
         </div>

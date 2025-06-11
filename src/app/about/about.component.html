@@ -1,186 +1,215 @@
-<!-- Company Description Section -->
-<section class="py-20 px-4 md:px-8 bg-white">
-  <div class="container-style" data-aos="fade-up">
-    <div class="flex flex-col md:flex-row items-center">
-      <div class="md:w-1/2 mb-10 md:mb-0">
-        <div class="overflow-hidden rounded-lg shadow-xl">
-          <div class="animated-image">
-            <svg class="w-full h-auto" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
-              <defs>
-                <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stop-color="#f8f8f8" />
-                  <stop offset="100%" stop-color="#e0e0e0" />
-                </linearGradient>
-                <linearGradient id="redGradient2" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stop-color="#ff3a3a" />
-                  <stop offset="100%" stop-color="#d10000" />
-                </linearGradient>
-              </defs>
-              <rect width="800" height="600" fill="url(#bgGradient)"/>
-              
-              <!-- Desk -->
-              <rect x="100" y="350" width="600" height="20" fill="#8B4513"/>
-              <rect x="120" y="370" width="560" height="150" fill="#A0522D"/>
-              
-              <!-- Computer -->
-              <rect x="300" y="200" width="200" height="150" rx="5" fill="#333"/>
-              <rect x="310" y="210" width="180" height="130" fill="#fff"/>
-              
-              <!-- Screen Content -->
-              <rect x="320" y="220" width="160" height="20" fill="#d10000"/>
-              <rect x="320" y="250" width="70" height="10" fill="#333"/>
-              <rect x="320" y="270" width="140" height="10" fill="#333"/>
-              <rect x="320" y="290" width="100" height="10" fill="#333"/>
-              <rect x="320" y="310" width="120" height="10" fill="#333"/>
-              
-              <!-- Computer Stand -->
-              <rect x="380" y="350" width="40" height="20" fill="#555"/>
-              <rect x="370" y="370" width="60" height="5" fill="#444"/>
-              
-              <!-- Person -->
-              <circle cx="400" cy="450" r="40" fill="#FFD700"/>
-              <rect x="380" y="490" width="40" height="60" fill="#1E90FF"/>
-              <rect x="370" y="490" width="10" height="40" fill="#FFD700"/>
-              <rect x="420" y="490" width="10" height="40" fill="#FFD700"/>
-              
-              <!-- Coffee Cup -->
-              <rect x="500" y="320" width="30" height="40" rx="5" fill="url(#redGradient2)"/>
-              <rect x="505" y="310" width="20" height="10" rx="5" fill="url(#redGradient2)"/>
-              <ellipse cx="515" cy="320" rx="15" ry="5" fill="#fff" opacity="0.3"/>
-              
-              <!-- Plant -->
-              <rect x="200" y="300" width="40" height="50" rx="5" fill="#8B4513"/>
-              <ellipse cx="220" cy="280" rx="30" ry="30" fill="#228B22"/>
-              <ellipse cx="210" cy="270" rx="15" ry="15" fill="#32CD32"/>
-              <ellipse cx="230" cy="260" rx="15" ry="15" fill="#32CD32"/>
-            </svg>
+<!-- About Component with Enhanced Design -->
+<div class="about-container">
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-state">
+    <div class="loading-spinner">
+      <i class="bi bi-arrow-repeat spinner"></i>
+    </div>
+    <p>Loading about information...</p>
+  </div>
+
+  <!-- About Content -->
+  <div *ngIf="!isLoading" class="about-content">
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="hero-content">
+        <div class="hero-text">
+          <h1 class="hero-title">About KAAR TECH</h1>
+          <p class="hero-subtitle">Innovating the future through cutting-edge technology solutions</p>
+          <div class="hero-stats">
+            <div class="stat-item">
+              <span class="stat-number">10+</span>
+              <span class="stat-label">Years Experience</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number">500+</span>
+              <span class="stat-label">Happy Clients</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number">1000+</span>
+              <span class="stat-label">Projects Delivered</span>
+            </div>
+          </div>
+        </div>
+        <div class="hero-visual">
+          <div class="floating-card">
+            <i class="bi bi-lightbulb"></i>
+            <span>Innovation</span>
+          </div>
+          <div class="floating-card">
+            <i class="bi bi-shield-check"></i>
+            <span>Security</span>
+          </div>
+          <div class="floating-card">
+            <i class="bi bi-people"></i>
+            <span>Collaboration</span>
           </div>
         </div>
       </div>
-      <div class="md:w-1/2 md:pl-12">
-        <h2 class="text-3xl font-bold mb-6 text-gray-800">What We Do</h2>
-        <p class="text-lg text-gray-600 mb-8 leading-relaxed">
-          Our company specializes in creating cutting-edge digital solutions that help businesses thrive in today's competitive landscape. We combine technical expertise with creative thinking to deliver results that exceed expectations and drive sustainable growth for our clients.
-        </p>
-        <div class="relative mb-10 pl-6">
-          <span class="quote-mark absolute left-0 top-0">"</span>
-          <blockquote class="text-xl italic font-medium text-gray-700 pl-4 border-l-4 border-red-600">
-            Innovation is not just about having new ideas; it's about creating value through implementation and delivering solutions that make a real difference in people's lives.
-          </blockquote>
-          <p class="mt-4 text-red-600 font-semibold">— Jane Doe, CEO</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+    </section>
 
-<!-- Vision & Mission Section -->
-<section class="py-20 px-4 md:px-8 bg-gray-50">
-  <div class="max-w-6xl mx-auto">
-    <h2 class="text-3xl font-bold text-center mb-16 text-gray-800" data-aos="fade-up">Our Vision & Mission</h2>
-    <div class="flex flex-col md:flex-row gap-10">
-      <div class="md:w-1/2 container-style" data-aos="fade-right" data-aos-delay="100">
-        <div class="w-16 h-16 rounded-full feature-icon flex items-center justify-center mb-6">
-          <span class="material-icons text-white text-3xl">visibility</span>
+    <!-- Company Description Section -->
+    <section class="company-section">
+      <div class="section-container">
+        <div class="content-grid">
+          <div class="content-text">
+            <h2>What We Do</h2>
+            <p class="lead-text">Our company specializes in creating cutting-edge digital solutions that help businesses thrive in today's competitive landscape. We combine technical expertise with creative thinking to deliver results that exceed expectations and drive sustainable growth for our clients.</p>
+            <div class="feature-list">
+              <div class="feature-item">
+                <i class="bi bi-check-circle"></i>
+                <span>Enterprise-grade solutions</span>
+              </div>
+              <div class="feature-item">
+                <i class="bi bi-check-circle"></i>
+                <span>24/7 customer support</span>
+              </div>
+              <div class="feature-item">
+                <i class="bi bi-check-circle"></i>
+                <span>Scalable architecture</span>
+              </div>
+            </div>
+            <blockquote class="company-quote">
+              <p>"Innovation is not just about having new ideas; it's about creating value through implementation and delivering solutions that make a real difference in people's lives."</p>
+              <footer>— Jane Doe, CEO</footer>
+            </blockquote>
+          </div>
+          <div class="content-visual">
+            <div class="visual-card">
+              <div class="card-header">
+                <div class="card-dots">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </div>
+                <span class="card-title">Dashboard</span>
+              </div>
+              <div class="card-body">
+                <div class="chart-placeholder">
+                  <div class="chart-bar" style="height: 60%"></div>
+                  <div class="chart-bar" style="height: 80%"></div>
+                  <div class="chart-bar" style="height: 45%"></div>
+                  <div class="chart-bar" style="height: 90%"></div>
+                  <div class="chart-bar" style="height: 70%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        <h3 class="text-2xl font-bold mb-4 text-gray-800">Our Vision</h3>
-        <p class="text-gray-600 leading-relaxed">
-          To be the leading innovator in digital solutions, recognized globally for our commitment to excellence, creativity, and transformative impact on businesses and communities. We envision a world where technology seamlessly enhances human experiences and creates opportunities for sustainable growth and positive change.
-        </p>
       </div>
-      <div class="md:w-1/2 container-style" data-aos="fade-left" data-aos-delay="200">
-        <div class="w-16 h-16 rounded-full feature-icon flex items-center justify-center mb-6">
-          <span class="material-icons text-white text-3xl">business_center</span>
-        </div>
-        <h3 class="text-2xl font-bold mb-4 text-gray-800">Our Mission</h3>
-        <p class="text-gray-600 leading-relaxed">
-          To empower organizations through innovative technology solutions that solve complex problems, enhance efficiency, and drive sustainable growth while maintaining the highest standards of quality and customer satisfaction. We are committed to fostering a culture of continuous learning, ethical practices, and collaborative partnerships that create lasting value for our clients, employees, and society.
-        </p>
-      </div>
-    </div>
-  </div>
-</section>
+    </section>
 
-<!-- Core Values Section -->
-<section class="py-20 px-4 md:px-8 bg-white">
-  <div class="container-style" data-aos="fade-up">
-    <h2 class="text-3xl font-bold text-center mb-16 text-gray-800">Our Core Values</h2>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-      <div class="text-center" *ngFor="let value of coreValues" data-aos="fade-up" data-aos-delay="100">
-        <div class="w-20 h-20 rounded-full feature-icon flex items-center justify-center mx-auto mb-6">
-          <span class="material-icons text-white text-4xl">{{value.icon}}</span>
+    <!-- Vision & Mission Section -->
+    <section class="vision-mission-section">
+      <div class="section-container">
+        <h2 class="section-title">Our Vision & Mission</h2>
+        <div class="vm-grid">
+          <div class="vm-card vision-card">
+            <div class="vm-icon">
+              <i class="bi bi-eye"></i>
+            </div>
+            <h3>Our Vision</h3>
+            <p>To be the leading innovator in digital solutions, recognized globally for our commitment to excellence, creativity, and transformative impact on businesses and communities. We envision a world where technology seamlessly enhances human experiences and creates opportunities for sustainable growth and positive change.</p>
+          </div>
+          <div class="vm-card mission-card">
+            <div class="vm-icon">
+              <i class="bi bi-target"></i>
+            </div>
+            <h3>Our Mission</h3>
+            <p>To empower organizations through innovative technology solutions that solve complex problems, enhance efficiency, and drive sustainable growth while maintaining the highest standards of quality and customer satisfaction. We are committed to fostering a culture of continuous learning, ethical practices, and collaborative partnerships.</p>
+          </div>
         </div>
-        <h3 class="text-xl font-bold mb-3 text-gray-800">{{value.title}}</h3>
-        <p class="text-gray-600">
-          {{value.description}}
-        </p>
       </div>
-    </div>
-  </div>
-</section>
+    </section>
 
-<!-- Features Section -->
-<section class="py-20 px-4 md:px-8 bg-gray-50">
-  <div class="max-w-6xl mx-auto">
-    <h2 class="text-3xl font-bold text-center mb-6 text-gray-800" data-aos="fade-up">Our Key Features</h2>
-    <p class="text-xl text-center text-gray-600 mb-16 max-w-3xl mx-auto" data-aos="fade-up" data-aos-delay="100">
-      What makes us different from others in the market? Here are some of our standout qualities that set us apart from the competition.
-    </p>
-    
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-      <div class="feature-card container-style" *ngFor="let feature of features; let i = index" 
-           [attr.data-aos]="'fade-up'" [attr.data-aos-delay]="100 + (i * 100)">
-        <div class="w-14 h-14 rounded-full feature-icon flex items-center justify-center mb-6">
-          <span class="material-icons text-white text-3xl">{{feature.icon}}</span>
+    <!-- Core Values Section -->
+    <section class="values-section">
+      <div class="section-container">
+        <h2 class="section-title">Our Core Values</h2>
+        <div class="values-grid">
+          <div class="value-card" *ngFor="let value of coreValues; let i = index" [style.animation-delay.ms]="i * 200">
+            <div class="value-icon">
+              <i class="bi" [ngClass]="value.icon"></i>
+            </div>
+            <h3>{{ value.title }}</h3>
+            <p>{{ value.description }}</p>
+          </div>
         </div>
-        <h3 class="text-xl font-bold mb-3 text-gray-800">{{feature.title}}</h3>
-        <p class="text-gray-600">
-          {{feature.description}}
-        </p>
       </div>
-    </div>
-  </div>
-</section>
+    </section>
 
-<!-- Team Section -->
-<section class="py-20 px-4 md:px-8 bg-white">
-  <div class="container-style" data-aos="fade-up">
-    <h2 class="text-3xl font-bold text-center mb-16 text-gray-800">Meet Our Leadership</h2>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-      <div class="text-center" *ngFor="let member of teamMembers; let i = index" 
-           [attr.data-aos]="'fade-up'" [attr.data-aos-delay]="100 + (i * 100)">
-        <div class="w-40 h-40 mx-auto mb-6 rounded-full overflow-hidden border-4 border-red-600">
-          <svg class="w-full h-full" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-            <rect width="200" height="200" fill="#f0f0f0"/>
-            <circle cx="100" cy="70" r="40" [attr.fill]="member.avatarColor"/>
-            <circle cx="100" cy="60" r="35" fill="#f8f8f8"/>
-            <circle cx="85" cy="55" r="6" fill="#333"/>
-            <circle cx="115" cy="55" r="6" fill="#333"/>
-            <path d="M85,75 Q100,90 115,75" stroke="#333" stroke-width="3" fill="none"/>
-            <path d="M60,140 Q100,190 140,140 L140,200 L60,200 Z" [attr.fill]="member.avatarColor"/>
-            <rect x="60" y="110" width="80" height="50" fill="#333"/>
-            <rect x="85" y="110" width="30" height="50" fill="#444"/>
-          </svg>
+    <!-- Features Section -->
+    <section class="features-section">
+      <div class="section-container">
+        <div class="section-header">
+          <h2 class="section-title">Our Key Features</h2>
+          <p class="section-subtitle">What makes us different from others in the market? Here are some of our standout qualities that set us apart from the competition.</p>
         </div>
-        <h3 class="text-xl font-bold mb-1 text-gray-800">{{member.name}}</h3>
-        <p class="text-red-600 font-medium mb-3">{{member.position}}</p>
-        <p class="text-gray-600 mb-4">
-          {{member.bio}}
-        </p>
+        <div class="features-grid">
+          <div class="feature-card" *ngFor="let feature of features; let i = index" [style.animation-delay.ms]="i * 150">
+            <div class="feature-icon">
+              <i class="bi" [ngClass]="feature.icon"></i>
+            </div>
+            <h3>{{ feature.title }}</h3>
+            <p>{{ feature.description }}</p>
+            <div class="feature-highlight"></div>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
-</section>
+    </section>
 
-<!-- Call to Action -->
-<section class="py-16 px-4 md:px-8 red-gradient text-white">
-  <div class="max-w-6xl mx-auto text-center" data-aos="fade-up">
-    <h2 class="text-3xl font-bold mb-6">Ready to Transform Your Business?</h2>
-    <p class="text-xl mb-10 max-w-3xl mx-auto">
-      Join hundreds of satisfied clients who have experienced the difference our solutions make. Let's create something amazing together.
-    </p>
-    <button (click)="scrollToContact()" class="bg-white text-red-600 font-bold py-3 px-8 rounded-full hover:bg-gray-100 transition duration-300 shadow-lg btn-pulse">
-      Contact Us Today
-    </button>
+    <!-- Team Section -->
+    <section class="team-section">
+      <div class="section-container">
+        <h2 class="section-title">Meet Our Leadership</h2>
+        <div class="team-grid">
+          <div class="team-card" *ngFor="let member of teamMembers; let i = index" [style.animation-delay.ms]="i * 200">
+            <div class="team-avatar">
+              <div class="avatar-circle" [style.background]="member.avatarColor">
+                <span>{{ getInitials(member.name) }}</span>
+              </div>
+              <div class="avatar-ring"></div>
+            </div>
+            <div class="team-info">
+              <h3>{{ member.name }}</h3>
+              <p class="team-position">{{ member.position }}</p>
+              <p class="team-bio">{{ member.bio }}</p>
+            </div>
+            <div class="team-social">
+              <a href="#" class="social-link"><i class="bi bi-linkedin"></i></a>
+              <a href="#" class="social-link"><i class="bi bi-twitter"></i></a>
+              <a href="#" class="social-link"><i class="bi bi-envelope"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="cta-section">
+      <div class="cta-container">
+        <div class="cta-content">
+          <h2>Ready to Transform Your Business?</h2>
+          <p>Join hundreds of satisfied clients who have experienced the difference our solutions make. Let's create something amazing together.</p>
+          <button class="cta-button" (click)="scrollToContact()">
+            <span>Contact Us Today</span>
+            <i class="bi bi-arrow-right"></i>
+          </button>
+        </div>
+        <div class="cta-visual">
+          <div class="floating-elements">
+            <div class="floating-element" style="animation-delay: 0s;">
+              <i class="bi bi-gear"></i>
+            </div>
+            <div class="floating-element" style="animation-delay: 1s;">
+              <i class="bi bi-graph-up"></i>
+            </div>
+            <div class="floating-element" style="animation-delay: 2s;">
+              <i class="bi bi-shield-check"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
   </div>
-</section>
+</div>
